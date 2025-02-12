@@ -1,9 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const QuizTaker = ({ quizId, quiz, setQuizStarted }) => {
+const QuizTaker = () => {
+    const { quizId } = useParams();
+    const navigate = useNavigate();
+    const [quiz, setQuiz] = useState(null);
     const [answers, setAnswers] = useState({});
     const [result, setResult] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        axios.get(`http://localhost:8080/api/modules/quizzes/${quizId}`, { withCredentials: true })
+            .then((response) => {
+                setQuiz(response.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error("Error fetching quiz:", err);
+                setError("Failed to load quiz.");
+                setLoading(false);
+            });
+    }, [quizId]);
 
     const handleSelectAnswer = (questionId, answerId) => {
         setAnswers({ ...answers, [questionId]: answerId });
@@ -20,21 +39,27 @@ const QuizTaker = ({ quizId, quiz, setQuizStarted }) => {
             .catch((error) => console.error("Error submitting quiz:", error));
     };
 
+    if (loading) return <p className="text-center">Loading quiz...</p>;
+    if (error) return <p className="text-danger text-center">{error}</p>;
+    if (!quiz) return <p className="text-danger text-center">No quiz found.</p>;
+
     return (
-        <div>
+        <div className="container mt-4">
+            <h2 className="text-center mb-4">{quiz.title}</h2>
+
             {result ? (
                 <div className="alert alert-success text-center">
                     <h2>🎉 Quiz Completed!</h2>
                     <p><strong>Score:</strong> {result.score} / 10</p>
-                    <button className="btn btn-primary mt-3" onClick={() => setQuizStarted(false)}>
+                    <button className="btn btn-primary mt-3" onClick={() => navigate(`/quiz/${quizId}/profile`)}>
                         Back to Quiz Profile
                     </button>
                 </div>
             ) : (
                 <form>
-                    {quiz.questions.map((question) => (
-                        <div key={question.id} className="mb-4">
-                            <h5 className="fw-semibold">{question.questionText}</h5>
+                    {quiz.questions.map((question, index) => (
+                        <div key={question.id} className="card p-3 mb-3 shadow-sm">
+                            <h5 className="fw-bold">{index + 1}. {question.questionText}</h5>
                             {question.answers.map((answer) => (
                                 <div key={answer.id} className="form-check">
                                     <input
@@ -53,9 +78,11 @@ const QuizTaker = ({ quizId, quiz, setQuizStarted }) => {
                             ))}
                         </div>
                     ))}
-                    <button type="button" className="btn btn-success" onClick={handleSubmit}>
-                        Submit Quiz
-                    </button>
+                    <div className="text-center">
+                        <button type="button" className="btn btn-success btn-lg px-4" onClick={handleSubmit}>
+                            Submit Quiz
+                        </button>
+                    </div>
                 </form>
             )}
         </div>

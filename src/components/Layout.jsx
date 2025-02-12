@@ -1,33 +1,53 @@
-import { Outlet } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Ensure Bootstrap JS is loaded
 
 const Layout = ({ student }) => {
     return (
         <div>
-            {/* ✅ Navbar - Always Visible */}
-            <nav className="navbar navbar-light bg-light shadow-sm p-3">
+            <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
                 <div className="container">
-                    <Link to="/dashboard" className="navbar-brand fw-bold fs-4">
+                    <Link className="navbar-brand fw-bold fs-4" to="/dashboard">
                         My Learning
                     </Link>
-                    {student && (
-                        <div className="d-flex align-items-center">
-                            <span className="me-2 fw-semibold">Profile</span>
-                            <Link to="/student/profile">
-                                <img
-                                    src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                                    alt="Profile"
-                                    className="rounded-circle border"
-                                    width="40"
-                                    height="40"
-                                />
-                            </Link>
-                        </div>
-                    )}
+
+                    {/* ✅ Bootstrap native toggle button */}
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav"
+                        aria-controls="navbarNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div className="collapse navbar-collapse" id="navbarNav">
+                        <ul className="navbar-nav ms-auto">
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/courses">
+                                    Courses
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/teachers">
+                                    Teachers
+                                </Link>
+                            </li>
+                            {student && (
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/student/profile">
+                                        Profile
+                                    </Link>
+                                </li>
+                            )}
+                        </ul>
+                    </div>
                 </div>
             </nav>
 
-            {/* ✅ This will render different pages inside this layout */}
             <div className="container mt-4">
                 <Outlet />
             </div>

@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom";
 
 const Course = () => {
     const { id } = useParams();
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [enrolled, setEnrolled] = useState(null); // Track enrollment status
 
     useEffect(() => {
         axios
             .get(`http://localhost:8080/api/courses/${id}`, { withCredentials: true })
             .then((response) => {
                 setCourse(response.data);
+                setEnrolled(response.data.enrolled); // Set enrollment status
             })
             .catch((error) => {
                 console.error("Error fetching course details:", error);
@@ -23,18 +24,40 @@ const Course = () => {
             });
     }, [id]);
 
+    const handleEnroll = () => {
+        axios
+            .post(`http://localhost:8080/api/courses/${id}/enroll`, {}, { withCredentials: true })
+            .then(() => {
+                setEnrolled(true); // Update state to reflect enrollment
+            })
+            .catch((error) => {
+                console.error("Error enrolling in course:", error);
+            });
+    };
+
     if (loading) return <p className="text-center mt-4 fs-4 fw-semibold">Loading...</p>;
     if (!course) return <p className="text-center text-danger fs-5">Course not found.</p>;
 
     return (
         <div className="container mt-5">
-            {/* Course Title & Description */}
+            {/* Course Title & Teacher */}
             <div className="card shadow-sm mb-4">
                 <div className="card-body">
-                    <h1 className="card-title fw-bold">{course.title}</h1>
+                    <h1 className="card-title fw-bold">
+                        {course.title} | {course.teacher?.firstname} {course.teacher?.lastname}
+                    </h1>
                     <p className="card-text text-muted">{course.description}</p>
                 </div>
             </div>
+
+            {/* Enroll Button (Only for not enrolled students) */}
+            {enrolled !== null && !enrolled && (
+                <div className="text-center mb-4">
+                    <button className="btn btn-success" onClick={handleEnroll}>
+                        Enroll in Course
+                    </button>
+                </div>
+            )}
 
             {/* Modules Section */}
             {course.modules.length === 0 ? (
@@ -87,7 +110,7 @@ const Course = () => {
                                                     <li key={quiz.id} className="list-group-item d-flex justify-content-between align-items-center">
                                                         {quiz.title}
                                                         <Link to={`/quiz/${quiz.id}/profile`} className="btn btn-primary btn-sm">
-                                                        Take Quiz
+                                                            Take Quiz
                                                         </Link>
                                                     </li>
                                                 ))}
@@ -105,6 +128,13 @@ const Course = () => {
                     ))}
                 </div>
             )}
+
+            {/* Teacher Profile Link */}
+            <div className="text-center mt-5">
+                <Link to={`/teachers/${course.teacher?.id}`} className="btn btn-outline-primary">
+                    View Teacher Profile
+                </Link>
+            </div>
         </div>
     );
 };
