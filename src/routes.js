@@ -12,6 +12,11 @@ import TeacherProfile from "./pages/TeacherProfile";
 import CourseList from "./pages/CourseList";
 import Teachers from "./pages/Teachers";
 import Navbar from "./components/Navbar";
+import TeacherDashboard from "./pages/TeacherDashboard";
+import CourseManage from "./pages/CourseManage";
+import AddQuiz from "./pages/AddQuiz";
+import ManageQuiz from "./pages/ManageQuiz";
+import ManageLecture from "./pages/ManageLecture";
 
 const AppRoutes = () => {
     return (
@@ -25,7 +30,13 @@ const AppRoutes = () => {
 
                 {/* ✅ Private routes (с навбаром) */}
                 <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
                 <Route path="/courses/:id" element={<Course />} />
+                <Route path="/courses/:id/manage" element={<CourseManage />} /> {/* New Route */}
+                <Route path="/modules/:id/add-quiz" element={<AddQuiz />} />
+                <Route path="/modules/:id/manage-lectures" element={<ManageLecture />} />
+                <Route path="/quizzes/:id/manage" element={<ManageQuiz />} />
+
                 <Route path="/student/profile" element={<Profile />} />
                 <Route path="/lectures/:id" element={<Lecture />} />
                 <Route path="/quiz/:quizId/profile" element={<QuizProfile />} />

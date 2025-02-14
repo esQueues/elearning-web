@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -15,18 +12,22 @@ const Login = () => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
-            credentials: "include", // 🔥 позволяет браузеру отправлять и получать куки
+            credentials: "include",
         });
 
         if (response.ok) {
+            const data = await response.json();
             alert("Login successful!");
-            navigate("/dashboard");
-            // редирект на другую страницу, если нужно
+
+            if (data.userRole === "TEACHER") {
+                navigate("/teacher-dashboard");
+            } else {
+                navigate("/dashboard");
+            }
         } else {
             alert("Invalid email or password.");
         }
     };
-
 
     return (
         <div style={styles.container}>
