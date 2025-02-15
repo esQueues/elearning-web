@@ -9,6 +9,15 @@ const AddModule = () => {
     const [title, setTitle] = useState("");
     const [error, setError] = useState("");
 
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
+        if (!e.target.value.trim()) {
+            setError("Module title cannot be empty.");
+        } else {
+            setError(""); // Clear error if title is valid
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -20,7 +29,7 @@ const AddModule = () => {
         try {
             await axios.post(
                 `http://localhost:8080/api/courses/${id}/modules`,
-                { title }, // Send only the title
+                { title },
                 { withCredentials: true }
             );
             navigate(`/courses/${id}/manage`);
@@ -38,16 +47,15 @@ const AddModule = () => {
                     <label className="form-label">Module Title</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${error ? "is-invalid" : ""}`}
                         value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        onChange={handleTitleChange}
                         required
                     />
+                    {error && <div className="invalid-feedback">{error}</div>}
                 </div>
 
-                {error && <p className="text-danger">{error}</p>}
-
-                <button type="submit" className="btn btn-primary">Add Module</button>
+                <button type="submit" className="btn btn-primary" disabled={!title.trim()}>Add Module</button>
                 <button type="button" className="btn btn-secondary ms-2" onClick={() => navigate(`/courses/${id}/manage`)}>Cancel</button>
             </form>
         </div>

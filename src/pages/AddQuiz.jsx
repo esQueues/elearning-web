@@ -45,14 +45,46 @@ const AddQuiz = () => {
     };
 
     const handleSubmit = async () => {
-        setLoading(true);
         setError(null);
+
+        // Validation: Check if title is empty
+        if (!title.trim()) {
+            setError("Quiz title cannot be empty.");
+            return;
+        }
+
+        // Validation: Check if there are questions
+        if (questions.length === 0) {
+            setError("Quiz must have at least one question.");
+            return;
+        }
+
+        // Validation: Check each question
+        for (let i = 0; i < questions.length; i++) {
+            if (!questions[i].questionText.trim()) {
+                setError(`Question ${i + 1} cannot be empty.`);
+                return;
+            }
+            if (questions[i].answers.length === 0) {
+                setError(`Question ${i + 1} must have at least one answer.`);
+                return;
+            }
+            for (let j = 0; j < questions[i].answers.length; j++) {
+                if (!questions[i].answers[j].answerText.trim()) {
+                    setError(`Answer ${j + 1} in Question ${i + 1} cannot be empty.`);
+                    return;
+                }
+            }
+        }
+
+        setLoading(true);
+
         const quiz = { title, questions };
 
         axios
             .post(`http://localhost:8080/api/modules/${id}/quizzes`, quiz, { withCredentials: true })
             .then((response) => {
-                const courseId = response.data.courseId; // Extract courseId from the response
+                const courseId = response.data.courseId; // Extract courseId from response
                 navigate(`/courses/${courseId}/manage`); // Redirect to course manage page
             })
             .catch((err) => {

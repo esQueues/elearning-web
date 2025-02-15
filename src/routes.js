@@ -21,6 +21,7 @@ import EditLecture from "./pages/EditLecture";
 import EditQuiz from "./pages/EditQuiz";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
+import AddCourse from "./pages/AddCourse";
 
 const AppRoutes = () => {
     return (
@@ -43,6 +44,8 @@ const AppRoutes = () => {
                     <Route path="/lectures/:lectureId/edit" element={<EditLecture />} />
                     <Route path="/quizzes/:quizId/edit" element={<EditQuiz />} />
                     <Route path="/courses/:id/add-module" element={<AddModule />} />
+                    <Route path="/courses/create" element={<AddCourse />} />
+
                     <Route path="/student/profile" element={<Profile />} />
                     <Route path="/lectures/:id" element={<Lecture />} />
                     <Route path="/quiz/:quizId/profile" element={<QuizProfile />} />
@@ -50,6 +53,7 @@ const AppRoutes = () => {
                     <Route path="/teachers/:teacherId" element={<TeacherProfile />} />
                     <Route path="/courses" element={<CourseList />} />
                     <Route path="/teachers" element={<Teachers />} />
+
                 </Route>
             </Route>
         </Routes>
