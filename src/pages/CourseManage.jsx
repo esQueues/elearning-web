@@ -24,6 +24,37 @@ const CourseManage = () => {
             .catch((error) => console.error("Error deleting course:", error));
     };
 
+    const handleDeleteModule = (moduleId) => {
+        axios
+            .delete(`http://localhost:8080/api/courses/modules/${moduleId}`, { withCredentials: true })
+            .then(() => setCourse(prev => ({ ...prev, modules: prev.modules.filter(m => m.id !== moduleId) })))
+            .catch(error => console.error("Error deleting module:", error));
+    };
+
+    const handleDeleteLecture = (lectureId, moduleId) => {
+        axios
+            .delete(`http://localhost:8080/api/courses/modules/lecture/${lectureId}`, { withCredentials: true })
+            .then(() => setCourse(prev => ({
+                ...prev,
+                modules: prev.modules.map(module =>
+                    module.id === moduleId ? { ...module, lectures: module.lectures.filter(l => l.id !== lectureId) } : module
+                )
+            })))
+            .catch(error => console.error("Error deleting lecture:", error));
+    };
+
+    const handleDeleteQuiz = (quizId, moduleId) => {
+        axios
+            .delete(`http://localhost:8080/api/modules/quizzes/${quizId}`, { withCredentials: true })
+            .then(() => setCourse(prev => ({
+                ...prev,
+                modules: prev.modules.map(module =>
+                    module.id === moduleId ? { ...module, quizzes: module.quizzes.filter(q => q.id !== quizId) } : module
+                )
+            })))
+            .catch(error => console.error("Error deleting quiz:", error));
+    };
+
     if (loading) return <p className="text-center mt-4 fs-4 fw-semibold">Loading...</p>;
     if (!course) return <p className="text-center text-danger fs-5">Course not found.</p>;
 
@@ -32,13 +63,11 @@ const CourseManage = () => {
             <h1 className="fw-bold">Manage Course: {course.title}</h1>
             <p className="text-muted">{course.description}</p>
 
-            {/* Add/Delete Buttons */}
             <div className="mb-4">
                 <Link to={`/courses/${id}/add-module`} className="btn btn-primary me-2">Add Module</Link>
                 <button className="btn btn-danger" onClick={handleDeleteCourse}>Delete Course</button>
             </div>
 
-            {/* Modules List */}
             {course.modules.length === 0 ? (
                 <p className="text-muted">No modules available.</p>
             ) : (
@@ -64,8 +93,46 @@ const CourseManage = () => {
                                 data-bs-parent="#courseAccordion"
                             >
                                 <div className="accordion-body">
+                                    <div className="d-flex justify-content-end mb-2">
+                                        <Link to={`/modules/${module.id}/edit`} className="btn btn-sm btn-warning me-2">Edit Module</Link>
+                                        <button className="btn btn-sm btn-danger" onClick={() => handleDeleteModule(module.id)}>Delete Module</button>
+                                    </div>
+                                    <h5>Lectures</h5>
+                                    {module.lectures.length > 0 ? (
+                                        <ul className="list-group mb-3">
+                                            {module.lectures.map((lecture) => (
+                                                <li key={lecture.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                                    {lecture.title}
+                                                    <div>
+                                                        <Link to={`/lectures/${lecture.id}/edit`} className="btn btn-sm btn-warning me-2">Edit</Link>
+                                                        <button className="btn btn-sm btn-danger" onClick={() => handleDeleteLecture(lecture.id, module.id)}>Delete</button>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p className="text-muted">No lectures available.</p>
+                                    )}
+
+                                    <h5>Quizzes</h5>
+                                    {module.quizzes.length > 0 ? (
+                                        <ul className="list-group mb-3">
+                                            {module.quizzes.map((quiz) => (
+                                                <li key={quiz.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                                    {quiz.title}
+                                                    <div>
+                                                        <Link to={`/quizzes/${quiz.id}/edit`} className="btn btn-sm btn-warning me-2">Edit</Link>
+                                                        <button className="btn btn-sm btn-danger" onClick={() => handleDeleteQuiz(quiz.id, module.id)}>Delete</button>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p className="text-muted">No quizzes available.</p>
+                                    )}
+
                                     <Link to={`/modules/${module.id}/add-lecture`} className="btn btn-success btn-sm me-2">Add Lecture</Link>
-                                    <Link to={`/modules/${module.id}/add-quiz`} className="btn btn-warning btn-sm">Add Quiz</Link>
+                                    <Link to={`/modules/${module.id}/add-quiz`} className="btn btn-info btn-sm">Add Quiz</Link>
                                 </div>
                             </div>
                         </div>
