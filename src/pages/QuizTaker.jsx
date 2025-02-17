@@ -50,7 +50,7 @@ const QuizTaker = () => {
             {result ? (
                 <div className="alert alert-success text-center">
                     <h2>🎉 Quiz Completed!</h2>
-                    <p><strong>Score:</strong> {result.score} / 10</p>
+                    <p><strong>Score:</strong> {result.score} / 100</p>
                     <button className="btn btn-primary mt-3" onClick={() => navigate(`/quiz/${quizId}/profile`)}>
                         Back to Quiz Profile
                     </button>

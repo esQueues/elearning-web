@@ -7,14 +7,14 @@ const Course = () => {
     const { id } = useParams();
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [enrolled, setEnrolled] = useState(null); // Track enrollment status
+    const [enrolled, setEnrolled] = useState(null);
 
     useEffect(() => {
         axios
             .get(`http://localhost:8080/api/courses/${id}`, { withCredentials: true })
             .then((response) => {
                 setCourse(response.data);
-                setEnrolled(response.data.enrolled); // Set enrollment status
+                setEnrolled(response.data.enrolled);
             })
             .catch((error) => {
                 console.error("Error fetching course details:", error);
@@ -28,7 +28,7 @@ const Course = () => {
         axios
             .post(`http://localhost:8080/api/courses/${id}/enroll`, {}, { withCredentials: true })
             .then(() => {
-                setEnrolled(true); // Update state to reflect enrollment
+                setEnrolled(true);
             })
             .catch((error) => {
                 console.error("Error enrolling in course:", error);
@@ -40,100 +40,106 @@ const Course = () => {
 
     return (
         <div className="container mt-5">
-            {/* Course Title & Teacher */}
-            <div className="card shadow-sm mb-4">
-                <div className="card-body">
-                    <h1 className="card-title fw-bold">
-                        {course.title} | {course.teacher?.firstname} {course.teacher?.lastname}
-                    </h1>
-                    <p className="card-text text-muted">{course.description}</p>
-                </div>
+            {/* Course Title Section */}
+            <div className="card shadow-lg p-4 mb-4 bg-light border rounded">
+                <h1 className="fw-bold text-primary">{course.title}</h1>
+                <p className="text-secondary">{course.description}</p>
             </div>
 
-            {/* Enroll Button (Only for not enrolled students) */}
+            {/* Teacher Profile Section */}
+            <Link to={`/teachers/${course.teacher?.id}`} className="text-decoration-none">
+                <div className="card shadow-sm p-3 d-flex flex-row align-items-center bg-white border rounded mb-4">
+                    <img
+                        src={course.teacher?.imageUrl || "https://img.freepik.com/premium-vector/girl-holding-pencil-picture-girl-holding-book_1013341-447639.jpg?semt=ais_hybrid"}
+                        alt="Teacher"
+                        className="rounded-circle me-3 border"
+                        style={{ width: "90px", height: "90px", objectFit: "cover" }}
+                    />
+                    <div>
+                        <h5 className="mb-1 text-dark">{course.teacher?.firstname} {course.teacher?.lastname}</h5>
+                        <p className="text-muted small">{course.teacher?.bio || "No bio available."}</p>
+                    </div>
+                </div>
+            </Link>
+
+            {/* Enroll Button */}
             {enrolled !== null && !enrolled && (
-                <div className="text-center mb-4">
-                    <button className="btn btn-success" onClick={handleEnroll}>
-                        Enroll in Course
+                <div className="text-center my-4">
+                    <button className="btn btn-success btn-lg px-5 py-2 rounded-pill" onClick={handleEnroll}>
+                        ✅ Enroll in Course
                     </button>
                 </div>
             )}
 
             {/* Modules Section */}
-            {course.modules.length === 0 ? (
-                <p className="text-center text-muted">No modules available.</p>
-            ) : (
-                <div className="accordion" id="courseAccordion">
-                    {course.modules.map((module, index) => (
-                        <div className="accordion-item" key={module.id}>
-                            <h2 className="accordion-header" id={`heading${index}`}>
-                                <button
-                                    className="accordion-button collapsed"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target={`#collapse${index}`}
-                                    aria-expanded="false"
-                                    aria-controls={`collapse${index}`}
+            <div className="card shadow-sm p-4 mb-4 bg-light border rounded">
+                {course.modules.length === 0 ? (
+                    <p className="text-center text-muted">No modules available.</p>
+                ) : (
+                    <div className="accordion" id="courseAccordion">
+                        {course.modules.map((module, index) => (
+                            <div className="accordion-item bg-light" key={module.id}>
+                                <h2 className="accordion-header" id={`heading${index}`}>
+                                    <button
+                                        className="accordion-button collapsed fw-bold bg-white text-dark"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target={`#collapse${index}`}
+                                        aria-expanded="false"
+                                        aria-controls={`collapse${index}`}
+                                    >
+                                        📚 {module.title}
+                                    </button>
+                                </h2>
+                                <div
+                                    id={`collapse${index}`}
+                                    className="accordion-collapse collapse"
+                                    aria-labelledby={`heading${index}`}
+                                    data-bs-parent="#courseAccordion"
                                 >
-                                    {module.title}
-                                </button>
-                            </h2>
-                            <div
-                                id={`collapse${index}`}
-                                className="accordion-collapse collapse"
-                                aria-labelledby={`heading${index}`}
-                                data-bs-parent="#courseAccordion"
-                            >
-                                <div className="accordion-body">
-                                    {/* Lectures */}
-                                    {module.lectures.length > 0 && (
-                                        <div className="mb-3">
-                                            <h5 className="fw-bold">📖 Lectures</h5>
-                                            <ul className="list-group">
-                                                {module.lectures.map((lecture) => (
-                                                    <li key={lecture.id} className="list-group-item">
-                                                        <Link to={`/lectures/${lecture.id}`} className="text-decoration-none">
-                                                            {lecture.title}
-                                                        </Link>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
+                                    <div className="accordion-body">
+                                        {/* Lectures */}
+                                        {module.lectures.length > 0 && (
+                                            <div className="mb-3">
+                                                <h5 className="fw-bold text-primary">📖 Lectures</h5>
+                                                <ul className="list-group">
+                                                    {module.lectures.map((lecture) => (
+                                                        <li key={lecture.id} className="list-group-item">
+                                                            <Link to={`/lectures/${lecture.id}`} className="text-decoration-none text-dark">
+                                                                {lecture.title}
+                                                            </Link>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
 
-                                    {/* Quizzes */}
-                                    {module.quizzes.length > 0 && (
-                                        <div>
-                                            <h5 className="fw-bold">📝 Quizzes</h5>
-                                            <ul className="list-group">
-                                                {module.quizzes.map((quiz) => (
-                                                    <li key={quiz.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                                        {quiz.title}
-                                                        <Link to={`/quiz/${quiz.id}/profile`} className="btn btn-primary btn-sm">
-                                                            Take Quiz
-                                                        </Link>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
+                                        {/* Quizzes */}
+                                        {module.quizzes.length > 0 && (
+                                            <div>
+                                                <h5 className="fw-bold text-danger">📝 Quizzes</h5>
+                                                <ul className="list-group">
+                                                    {module.quizzes.map((quiz) => (
+                                                        <li key={quiz.id} className="list-group-item">
+                                                            <Link to={`/quiz/${quiz.id}/profile`} className="text-decoration-none text-dark">
+                                                                {quiz.title}
+                                                            </Link>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
 
-                                    {/* No Lectures & Quizzes */}
-                                    {module.lectures.length === 0 && module.quizzes.length === 0 && (
-                                        <p className="text-muted">No lectures or quizzes available.</p>
-                                    )}
+                                        {/* No Lectures & Quizzes */}
+                                        {module.lectures.length === 0 && module.quizzes.length === 0 && (
+                                            <p className="text-muted">No lectures or quizzes available.</p>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {/* Teacher Profile Link */}
-            <div className="text-center mt-5">
-                <Link to={`/teachers/${course.teacher?.id}`} className="btn btn-outline-primary">
-                    View Teacher Profile
-                </Link>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

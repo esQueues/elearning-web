@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Dashboard = () => {
-    const [student, setStudent] = useState(null);
+    const [ setStudent] = useState(null);
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -26,6 +26,12 @@ const Dashboard = () => {
 
     return (
         <div className="container mt-4">
+            {/*{student && (*/}
+            {/*    <div className="text-center mb-4">*/}
+            {/*        <h3>Welcome, {student.firstname} {student.lastname}!</h3>*/}
+            {/*    </div>*/}
+            {/*)}*/}
+
             <h1 className="text-center mb-4 fw-bold">My Courses</h1>
 
             {courses.length === 0 ? (
@@ -34,16 +40,30 @@ const Dashboard = () => {
                     <Link to="/courses" className="btn btn-primary">Browse Courses</Link>
                 </div>
             ) : (
-                <div className={`row ${courses.length === 1 ? "justify-content-center" : ""}`}>
+                <div className="row g-4 justify-content-center">
                     {courses.map((course) => (
-                        <div key={course.id} className="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div key={course.id} className="col-lg-4 col-md-6 col-sm-12">
                             <Link to={`/courses/${course.id}`} className="text-decoration-none">
                                 <div className="card h-100 shadow-sm border-0">
-                                    <div className="card-body text-center">
-                                        <h5 className="card-title text-dark">{course.title}</h5>
-                                        <p className="card-text text-muted">
-                                            Teacher: {course.teacher?.firstname ?? "Unknown"} {course.teacher?.lastname ?? ""}
+                                    <div className="position-relative">
+                                        {/* Course Image */}
+                                        <img
+                                            src={course.imageUrl || "https://allea.org/wp-content/uploads/2019/06/shutterstock_520698799small.jpg"}
+                                            alt="Course Banner"
+                                            className="card-img-top"
+                                            style={{ height: "150px", objectFit: "cover" }}
+                                        />
+
+
+                                    </div>
+                                    <div className="card-body">
+                                        <h5 className="card-title text-dark fw-bold">{course.title}</h5>
+                                        <p className="card-text text-muted mb-2">
+                                            <i className="fas fa-user"></i> Teacher: {course.teacher?.firstname ?? "Unknown"} {course.teacher?.lastname ?? ""}
                                         </p>
+                                        {/*<p className="text-secondary small">*/}
+                                        {/*    <i className="fas fa-clock"></i> Duration: {course.duration || "N/A"} hours*/}
+                                        {/*</p>*/}
                                     </div>
                                 </div>
                             </Link>

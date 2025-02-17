@@ -7,6 +7,7 @@ const CourseManage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [course, setCourse] = useState(null);
+    const [students, setStudents] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -54,6 +55,13 @@ const CourseManage = () => {
             })))
             .catch(error => console.error("Error deleting quiz:", error));
     };
+
+    useEffect(() => {
+        axios
+            .get(`http://localhost:8080/api/courses/${id}/students`, { withCredentials: true })
+            .then((response) => setStudents(response.data))
+            .catch((error) => console.error("Error fetching students:", error));
+    }, [id]);
 
     if (loading) return <p className="text-center mt-4 fs-4 fw-semibold">Loading...</p>;
     if (!course) return <p className="text-center text-danger fs-5">Course not found.</p>;
@@ -140,9 +148,42 @@ const CourseManage = () => {
                 </div>
             )}
 
+            <h2 className="mt-4">Enrolled Students</h2>
+            {students.length > 0 ? (
+                <div className="table-responsive">
+                    <table className="table table-striped table-bordered">
+                        <thead className="table-dark">
+                        <tr>
+                            <th>Email</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>School Info</th>
+                            <th>Grade</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {students.map((student) => (
+                            <tr key={student.id}>
+                                <td>{student.email}</td>
+                                <td>{student.firstname}</td>
+                                <td>{student.lastname}</td>
+                                <td>{student.schoolInfo}</td>
+                                <td>{student.gradeLevel}</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+            ) : (
+                <p className="text-muted">No students enrolled.</p>
+            )}
+
+
             <div className="text-center mt-5">
                 <Link to={`/courses/${id}`} className="btn btn-outline-primary">Back to Course</Link>
             </div>
+
+
         </div>
     );
 };

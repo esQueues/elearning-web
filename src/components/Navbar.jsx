@@ -64,13 +64,13 @@ const Navbar = () => {
     const profileLink = userType === "TEACHER" ? "/teachers/profile" : "/student/profile";
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light px-3">
+        <nav className="navbar navbar-expand-lg bg-dark text-light px-3">
             <div className="container d-flex justify-content-between align-items-center">
-                {/* Logo / Brand (Links to Dashboard) */}
-                <Link className="navbar-brand fw-bold mx-auto" to={dashboardLink}>LMS</Link>
+                {/* Logo / Brand */}
+                <Link className="navbar-brand fw-bold mx-auto text-white" to={dashboardLink}>dashboard</Link>
 
-                {/* Navbar Toggler for Mobile */}
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                {/* Navbar Toggler */}
+                <button className="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
@@ -78,10 +78,10 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
                     <ul className="navbar-nav gap-4">
                         <li className="nav-item">
-                            <Link className="nav-link" to="/courses">Courses</Link>
+                            <Link className="nav-link text-white" to="/courses">Courses</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/teachers">Teachers</Link>
+                            <Link className="nav-link text-white" to="/teachers">Teachers</Link>
                         </li>
                     </ul>
                 </div>
@@ -90,13 +90,13 @@ const Navbar = () => {
                 <div className="d-flex align-items-center gap-2">
                     {isAuthenticated ? (
                         <div className="dropdown">
-                            {/* Profile Icon (Dropdown Toggle) */}
-                            <button className="btn btn-light dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            {/* Profile Icon */}
+                            <button className="btn btn-secondary dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown">
                                 <i className="fas fa-user-circle fs-3"></i>
                             </button>
 
                             {/* Dropdown Menu */}
-                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <ul className="dropdown-menu dropdown-menu-end">
                                 <li>
                                     <Link className="dropdown-item" to={profileLink}>
                                         <i className="fas fa-user"></i> Profile
@@ -119,6 +119,7 @@ const Navbar = () => {
                 </div>
             </div>
         </nav>
+
     );
 };
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -8,7 +8,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const QuizProfile = () => {
     const { quizId } = useParams();
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
     const [quiz, setQuiz] = useState(null);
     const [loading, setLoading] = useState(true);
     const [lastAttempt, setLastAttempt] = useState(null);
@@ -63,6 +63,20 @@ const QuizProfile = () => {
         }]
     } : null;
 
+    // Format feedback text: remove "***" and replace double newlines with <br /><br />
+    const formatFeedback = (text) => {
+        if (!text) return "";
+        return text
+            .replace(/\*\*\*(.*?)\*\*\*/g, "<b><i>$1</i></b>") // *** -> жирный + курсив
+            .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>") // ** -> жирный
+            .replace(/\*(.*?)\*/g, "<i>$1</i>") // * -> курсив
+            .replace(/\n\n/g, "<br /><br />") // Двойной перевод строки
+            .replace(/\n/g, "<br />"); // Одиночный перевод строки
+    };
+
+
+
+
     return (
         <div className="container mt-5">
             <h1 className="fw-bold">{quiz.title}</h1>
@@ -89,7 +103,7 @@ const QuizProfile = () => {
                     </div>
                     {showFeedback && (
                         <div className="card-body">
-                            <p>{feedback}</p>
+                            <p dangerouslySetInnerHTML={{ __html: formatFeedback(feedback) }} />
                         </div>
                     )}
                 </div>
