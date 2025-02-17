@@ -21,6 +21,8 @@ const Login = () => {
 
             if (data.userRole === "TEACHER") {
                 navigate("/teacher-dashboard");
+            } else if (data.userRole === "ADMIN") {
+                navigate("/admin-dashboard");
             } else {
                 navigate("/dashboard");
             }

@@ -24,6 +24,9 @@ import Navbar from "./components/Navbar";
 import AddCourse from "./pages/AddCourse";
 import AdminStudentsPage from "./pages/AdminStudentsPage";
 import StudentProfilePage from "./pages/StudentProfilePage";
+import AdminTeachersPage from "./pages/AdminTeachersPage";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminFeedbacksPage from "./pages/AdminFeedbacksPage";
 
 const AppRoutes = () => {
     return (
@@ -48,8 +51,12 @@ const AppRoutes = () => {
                     <Route path="/courses/:id/add-module" element={<AddModule />} />
                     <Route path="/courses/create" element={<AddCourse />} />
 
+
+                    <Route path="/admin-dashboard" element={<AdminDashboard />} />
                     <Route path="/admin/students" element={<AdminStudentsPage />} />
                     <Route path="/admin/students/:id" element={<StudentProfilePage />} />
+                    <Route path="/admin/teachers" element={<AdminTeachersPage />} />
+                    <Route path="/admin/feedbacks" element={<AdminFeedbacksPage />} />
 
                     <Route path="/student/profile" element={<Profile />} />
                     <Route path="/lectures/:id" element={<Lecture />} />

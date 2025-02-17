@@ -60,7 +60,11 @@ const Navbar = () => {
     };
 
     // Define student and teacher dashboard/profile links
-    const dashboardLink = userType === "TEACHER" ? "/teacher-dashboard" : "/dashboard";
+
+    const dashboardLink = userType === "TEACHER" ? "/teacher-dashboard"
+        : userType === "ADMIN" ? "/admin-dashboard"
+            : "/dashboard";
+
     const profileLink = userType === "TEACHER" ? "/teachers/profile" : "/student/profile";
 
     return (
