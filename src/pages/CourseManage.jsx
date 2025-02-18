@@ -10,66 +10,77 @@ const CourseManage = () => {
     const [students, setStudents] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedTitle, setEditedTitle] = useState("");
+    const [editedDescription, setEditedDescription] = useState("");
+
     useEffect(() => {
-        axios
-            .get(`http://localhost:8080/api/courses/${id}`, { withCredentials: true })
+        axios.get(`http://localhost:8080/api/courses/${id}`, { withCredentials: true })
             .then((response) => setCourse(response.data))
             .catch((error) => console.error("Error fetching course:", error))
             .finally(() => setLoading(false));
     }, [id]);
 
+    useEffect(() => {
+        axios.get(`http://localhost:8080/api/courses/${id}/students`, { withCredentials: true })
+            .then((response) => setStudents(response.data))
+            .catch((error) => console.error("Error fetching students:", error));
+    }, [id]);
+
     const handleDeleteCourse = () => {
-        axios
-            .delete(`http://localhost:8080/api/courses/${id}`, { withCredentials: true })
+        axios.delete(`http://localhost:8080/api/courses/${id}`, { withCredentials: true })
             .then(() => navigate("/teacher-dashboard"))
             .catch((error) => console.error("Error deleting course:", error));
     };
 
-    const handleDeleteModule = (moduleId) => {
-        axios
-            .delete(`http://localhost:8080/api/courses/modules/${moduleId}`, { withCredentials: true })
-            .then(() => setCourse(prev => ({ ...prev, modules: prev.modules.filter(m => m.id !== moduleId) })))
-            .catch(error => console.error("Error deleting module:", error));
+    const handleEditClick = () => {
+        setEditedTitle(course.title);
+        setEditedDescription(course.description);
+        setIsEditing(true);
     };
 
-    const handleDeleteLecture = (lectureId, moduleId) => {
-        axios
-            .delete(`http://localhost:8080/api/courses/modules/lecture/${lectureId}`, { withCredentials: true })
-            .then(() => setCourse(prev => ({
-                ...prev,
-                modules: prev.modules.map(module =>
-                    module.id === moduleId ? { ...module, lectures: module.lectures.filter(l => l.id !== lectureId) } : module
-                )
-            })))
-            .catch(error => console.error("Error deleting lecture:", error));
+    const handleSaveCourse = () => {
+        axios.put(`http://localhost:8080/api/courses/${id}`,
+            { title: editedTitle, description: editedDescription },
+            { withCredentials: true }
+        )
+            .then(() => {
+                setCourse(prev => ({ ...prev, title: editedTitle, description: editedDescription }));
+                setIsEditing(false);
+            })
+            .catch(error => console.error("Error updating course:", error));
     };
-
-    const handleDeleteQuiz = (quizId, moduleId) => {
-        axios
-            .delete(`http://localhost:8080/api/modules/quizzes/${quizId}`, { withCredentials: true })
-            .then(() => setCourse(prev => ({
-                ...prev,
-                modules: prev.modules.map(module =>
-                    module.id === moduleId ? { ...module, quizzes: module.quizzes.filter(q => q.id !== quizId) } : module
-                )
-            })))
-            .catch(error => console.error("Error deleting quiz:", error));
-    };
-
-    useEffect(() => {
-        axios
-            .get(`http://localhost:8080/api/courses/${id}/students`, { withCredentials: true })
-            .then((response) => setStudents(response.data))
-            .catch((error) => console.error("Error fetching students:", error));
-    }, [id]);
 
     if (loading) return <p className="text-center mt-4 fs-4 fw-semibold">Loading...</p>;
     if (!course) return <p className="text-center text-danger fs-5">Course not found.</p>;
 
     return (
         <div className="container mt-5">
-            <h1 className="fw-bold">Manage Course: {course.title}</h1>
-            <p className="text-muted">{course.description}</p>
+            <div className="mb-4">
+                {isEditing ? (
+                    <>
+                        <input
+                            type="text"
+                            className="form-control mb-2"
+                            value={editedTitle}
+                            onChange={(e) => setEditedTitle(e.target.value)}
+                        />
+                        <textarea
+                            className="form-control mb-2"
+                            value={editedDescription}
+                            onChange={(e) => setEditedDescription(e.target.value)}
+                        />
+                        <button className="btn btn-success me-2" onClick={handleSaveCourse}>Save</button>
+                        <button className="btn btn-secondary" onClick={() => setIsEditing(false)}>Cancel</button>
+                    </>
+                ) : (
+                    <>
+                        <h1 className="fw-bold">{course.title}</h1>
+                        <p className="text-muted">{course.description}</p>
+                        <button className="btn btn-warning" onClick={handleEditClick}>Edit</button>
+                    </>
+                )}
+            </div>
 
             <div className="mb-4">
                 <Link to={`/courses/${id}/add-module`} className="btn btn-primary me-2">Add Module</Link>
@@ -103,7 +114,7 @@ const CourseManage = () => {
                                 <div className="accordion-body">
                                     <div className="d-flex justify-content-end mb-2">
                                         <Link to={`/modules/${module.id}/edit`} className="btn btn-sm btn-warning me-2">Edit Module</Link>
-                                        <button className="btn btn-sm btn-danger" onClick={() => handleDeleteModule(module.id)}>Delete Module</button>
+                                        <button className="btn btn-sm btn-danger">Delete Module</button>
                                     </div>
                                     <h5>Lectures</h5>
                                     {module.lectures.length > 0 ? (
@@ -113,7 +124,7 @@ const CourseManage = () => {
                                                     {lecture.title}
                                                     <div>
                                                         <Link to={`/lectures/${lecture.id}/edit`} className="btn btn-sm btn-warning me-2">Edit</Link>
-                                                        <button className="btn btn-sm btn-danger" onClick={() => handleDeleteLecture(lecture.id, module.id)}>Delete</button>
+                                                        <button className="btn btn-sm btn-danger">Delete</button>
                                                     </div>
                                                 </li>
                                             ))}
@@ -130,7 +141,7 @@ const CourseManage = () => {
                                                     {quiz.title}
                                                     <div>
                                                         <Link to={`/quizzes/${quiz.id}/edit`} className="btn btn-sm btn-warning me-2">Edit</Link>
-                                                        <button className="btn btn-sm btn-danger" onClick={() => handleDeleteQuiz(quiz.id, module.id)}>Delete</button>
+                                                        <button className="btn btn-sm btn-danger">Delete</button>
                                                     </div>
                                                 </li>
                                             ))}
@@ -178,12 +189,9 @@ const CourseManage = () => {
                 <p className="text-muted">No students enrolled.</p>
             )}
 
-
             <div className="text-center mt-5">
                 <Link to={`/courses/${id}`} className="btn btn-outline-primary">Back to Course</Link>
             </div>
-
-
         </div>
     );
 };

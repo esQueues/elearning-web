@@ -1,65 +1,74 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Button, Table, Spinner, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const TeacherDashboard = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const location = useLocation();
 
+    // Fetch courses from the backend
     const fetchCourses = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/teachers/courses", {
-                withCredentials: true, // Allows cookies for authentication
-            });
-
-            setCourses(response.data); // Ensure correct data assignment
-        } catch (err) {
-            setError(err.response?.data?.message || "Failed to fetch courses");
-        } finally {
+            const response = await axios.get('http://localhost:8080/api/teachers/courses', { withCredentials: true });
+            setCourses(response.data);
+            setLoading(false);
+        } catch (error) {
+            console.error("Error fetching courses:", error);
+            setError('Failed to fetch courses');
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchCourses(); // Initial fetch
-    }, [location]);
+        fetchCourses();
+    }, []);
 
     return (
-        <div style={styles.container}>
-            <h2>Your Courses</h2>
-            <Link to="/courses/create" className="btn btn-success mb-3">
-                + Create Course
-            </Link>
+        <Container className="mt-4">
+            <h1 className="mb-4 text-center">Teacher Dashboard</h1>
+            <div className="text-center mb-4">
+                <Link to="/courses/create">
+                    <Button variant="success">+ Create Course</Button>
+                </Link>
+            </div>
 
-            {loading && <p>Loading...</p>}
-            {error && <p style={styles.error}>{error}</p>}
-            {!loading && !error && courses.length === 0 && <p>No courses found.</p>}
-            <ul style={styles.courseList}>
-                {courses.map((course) => (
-                    <li key={course.id} style={styles.courseItem}>
-                        <Link to={`/courses/${course.id}`} style={styles.courseLink}>
-                            {course.title}
-                        </Link>
-                        {" | "}
-                        <Link to={`/courses/${course.id}/manage`} style={styles.manageLink}>
-                            Manage
-                        </Link>
-                    </li>
-                ))}
-            </ul>
-        </div>
+            {loading ? (
+                <div className="text-center">
+                    <Spinner animation="border" variant="primary" />
+                    <p>Loading courses...</p>
+                </div>
+            ) : error ? (
+                <div className="text-center text-danger">
+                    <p>{error}</p>
+                </div>
+            ) : (
+                <Table striped bordered hover responsive>
+                    <thead>
+                    <tr>
+                        <th>Course Title</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {courses.map(course => (
+                        <tr key={course.id}>
+                            <td>
+                                <Link to={`/courses/${course.id}`}>{course.title}</Link>
+                            </td>
+                            <td>
+                                <Link to={`/courses/${course.id}/manage`}>
+                                    <Button variant="info">Manage</Button>
+                                </Link>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </Table>
+            )}
+        </Container>
     );
-};
-
-const styles = {
-    container: { textAlign: "center", marginTop: "50px" },
-    error: { color: "red" },
-    courseList: { listStyle: "none", padding: 0 },
-    courseItem: { margin: "10px 0" },
-    courseLink: { textDecoration: "none", color: "blue", fontWeight: "bold" },
-    manageLink: { textDecoration: "none", color: "green" }
 };
 
 export default TeacherDashboard;

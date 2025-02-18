@@ -27,6 +27,7 @@ import StudentProfilePage from "./pages/StudentProfilePage";
 import AdminTeachersPage from "./pages/AdminTeachersPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminFeedbacksPage from "./pages/AdminFeedbacksPage";
+import AdminCoursePage from "./pages/AdminCoursePage";
 
 const AppRoutes = () => {
     return (
@@ -57,6 +58,8 @@ const AppRoutes = () => {
                     <Route path="/admin/students/:id" element={<StudentProfilePage />} />
                     <Route path="/admin/teachers" element={<AdminTeachersPage />} />
                     <Route path="/admin/feedbacks" element={<AdminFeedbacksPage />} />
+                    <Route path="/admin/courses" element={<AdminCoursePage />} />
+
 
                     <Route path="/student/profile" element={<Profile />} />
                     <Route path="/lectures/:id" element={<Lecture />} />

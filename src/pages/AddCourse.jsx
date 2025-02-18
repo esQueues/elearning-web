@@ -21,8 +21,11 @@ const AddCourse = () => {
         setLoading(true);
         try {
             await axios.post("http://localhost:8080/api/courses", { title, description }, { withCredentials: true });
-            navigate("/teacher-dashboard");
-            } catch (err) {
+
+            // Передаем флаг courseAdded в state
+            navigate("/teacher-dashboard",
+                { state: { courseAdded: true } });
+        } catch (err) {
             setError("Error creating course. Please try again.");
             console.error("Error creating course:", err);
         } finally {
