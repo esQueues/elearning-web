@@ -28,9 +28,49 @@ const CourseManage = () => {
     }, [id]);
 
     const handleDeleteCourse = () => {
-        axios.delete(`http://localhost:8080/api/courses/${id}`, { withCredentials: true })
-            .then(() => navigate("/teacher-dashboard"))
-            .catch((error) => console.error("Error deleting course:", error));
+        if (window.confirm("Are you sure you want to delete this course? This action cannot be undone.")) {
+            axios.delete(`http://localhost:8080/api/courses/${id}`, { withCredentials: true })
+                .then(() => navigate("/teacher-dashboard"))
+                .catch((error) => console.error("Error deleting course:", error));
+        }
+    };
+
+    const handleDeleteModule = (moduleId) => {
+        axios
+            .delete(`http://localhost:8080/api/courses/modules/${moduleId}`, { withCredentials: true })
+            .then(() => setCourse(prev => ({
+                ...prev,
+                modules: prev.modules.filter(m => m.id !== moduleId)
+            })))
+            .catch(error => console.error("Error deleting module:", error));
+    };
+
+    const handleDeleteLecture = (lectureId, moduleId) => {
+        axios
+            .delete(`http://localhost:8080/api/courses/modules/lecture/${lectureId}`, { withCredentials: true })
+            .then(() => setCourse(prev => ({
+                ...prev,
+                modules: prev.modules.map(module =>
+                    module.id === moduleId
+                        ? { ...module, lectures: module.lectures.filter(l => l.id !== lectureId) }
+                        : module
+                )
+            })))
+            .catch(error => console.error("Error deleting lecture:", error));
+    };
+
+    const handleDeleteQuiz = (quizId, moduleId) => {
+        axios
+            .delete(`http://localhost:8080/api/modules/quizzes/${quizId}`, { withCredentials: true })
+            .then(() => setCourse(prev => ({
+                ...prev,
+                modules: prev.modules.map(module =>
+                    module.id === moduleId
+                        ? { ...module, quizzes: module.quizzes.filter(q => q.id !== quizId) }
+                        : module
+                )
+            })))
+            .catch(error => console.error("Error deleting quiz:", error));
     };
 
     const handleEditClick = () => {
@@ -114,7 +154,7 @@ const CourseManage = () => {
                                 <div className="accordion-body">
                                     <div className="d-flex justify-content-end mb-2">
                                         <Link to={`/modules/${module.id}/edit`} className="btn btn-sm btn-warning me-2">Edit Module</Link>
-                                        <button className="btn btn-sm btn-danger">Delete Module</button>
+                                        <button className="btn btn-sm btn-danger" onClick={() => handleDeleteModule(module.id)}>Delete Module</button>
                                     </div>
                                     <h5>Lectures</h5>
                                     {module.lectures.length > 0 ? (
@@ -124,7 +164,7 @@ const CourseManage = () => {
                                                     {lecture.title}
                                                     <div>
                                                         <Link to={`/lectures/${lecture.id}/edit`} className="btn btn-sm btn-warning me-2">Edit</Link>
-                                                        <button className="btn btn-sm btn-danger">Delete</button>
+                                                        <button className="btn btn-sm btn-danger" onClick={() => handleDeleteLecture(lecture.id, module.id)}>Delete</button>
                                                     </div>
                                                 </li>
                                             ))}
@@ -141,7 +181,7 @@ const CourseManage = () => {
                                                     {quiz.title}
                                                     <div>
                                                         <Link to={`/quizzes/${quiz.id}/edit`} className="btn btn-sm btn-warning me-2">Edit</Link>
-                                                        <button className="btn btn-sm btn-danger">Delete</button>
+                                                        <button className="btn btn-sm btn-danger" onClick={() => handleDeleteQuiz(quiz.id, module.id)}>Delete</button>
                                                     </div>
                                                 </li>
                                             ))}
