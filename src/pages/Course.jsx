@@ -47,7 +47,7 @@ const Course = () => {
             </div>
 
             {/* Teacher Profile Section */}
-            <Link to={`/teachers/${course.teacher?.id}`} className="text-decoration-none">
+            <Link to={`/teachers/public/${course.teacher?.id}`} className="text-decoration-none">
                 <div className="card shadow-sm p-3 d-flex flex-row align-items-center bg-white border rounded mb-4">
                     <img
                         src={course.teacher?.imageUrl || "https://img.freepik.com/premium-vector/girl-holding-pencil-picture-girl-holding-book_1013341-447639.jpg?semt=ais_hybrid"}

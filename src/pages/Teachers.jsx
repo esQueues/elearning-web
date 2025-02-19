@@ -43,7 +43,7 @@ const Teachers = () => {
             <div className="row g-4 justify-content-center">
                 {teachers.map((teacher) => (
                     <div key={teacher.id} className="col-lg-4 col-md-6 col-sm-12">
-                        <Link to={`/teachers/${teacher.id}`} className="text-decoration-none">
+                        <Link to={`/teachers/public/${teacher.id}`} className="text-decoration-none">
                             <div className="card h-100 shadow-sm border-0">
                                 <div className="position-relative text-center p-3">
                                     {/* Teacher Image */}

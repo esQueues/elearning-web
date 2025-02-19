@@ -28,6 +28,7 @@ import AdminTeachersPage from "./pages/AdminTeachersPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminFeedbacksPage from "./pages/AdminFeedbacksPage";
 import AdminCoursePage from "./pages/AdminCoursePage";
+import PublicTeacherProfile from "./pages/PublicTeacherProfile";
 
 const AppRoutes = () => {
     return (
@@ -65,6 +66,7 @@ const AppRoutes = () => {
                     <Route path="/lectures/:id" element={<Lecture />} />
                     <Route path="/quiz/:quizId/profile" element={<QuizProfile />} />
                     <Route path="/quiz/:quizId" element={<QuizTaker />} />
+                    <Route path="/teachers/public/:teacherId" element={<PublicTeacherProfile />} />
                     <Route path="/teachers/:teacherId" element={<TeacherProfile />} />
                     <Route path="/courses" element={<CourseList />} />
                     <Route path="/teachers" element={<Teachers />} />
