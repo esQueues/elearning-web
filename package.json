@@ -8,6 +8,7 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.7",
     "cra-template": "1.2.0",
+    "framer-motion": "^12.4.7",
     "holderjs": "^2.9.9",
     "postcss-cli": "^11.0.0",
     "react": "^19.0.0",

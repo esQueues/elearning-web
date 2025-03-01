@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { motion } from "framer-motion";
+import { Spinner } from "react-bootstrap"; // Bootstrap spinner (optional)
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -53,7 +55,6 @@ const QuizProfile = () => {
     if (loading) return <p className="text-center mt-4 fs-4 fw-semibold">Loading...</p>;
     if (!quiz) return <p className="text-center text-danger fs-5">Quiz not found.</p>;
 
-    // Prepare data for the score chart
     const scoreData = lastAttempt ? {
         labels: ["Score", "Remaining"],
         datasets: [{
@@ -63,24 +64,33 @@ const QuizProfile = () => {
         }]
     } : null;
 
-    // Format feedback text: remove "***" and replace double newlines with <br /><br />
     const formatFeedback = (text) => {
         if (!text) return "";
+
         return text
-            .replace(/\*\*\*(.*?)\*\*\*/g, "<b><i>$1</i></b>") // *** -> жирный + курсив
-            .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>") // ** -> жирный
-            .replace(/\*(.*?)\*/g, "<i>$1</i>") // * -> курсив
-            .replace(/\n\n/g, "<br /><br />") // Двойной перевод строки
-            .replace(/\n/g, "<br />"); // Одиночный перевод строки
+            .replace(/\*\*\*(.*?)\*\*\*/g, "<b><i>$1</i></b>")
+            .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+            .replace(/\b\*(\S.*?\S)\*\b/g, "<i>$1</i>")
+            .replace(/^\*\s(?!✅|❌)(.*)/gm, "• $1")
+            .replace(/\n{2,}/g, "<br /><br />")
+            .replace(/\n/g, "<br />");
     };
+
+
+
+
+
 
 
 
 
     return (
         <div className="container mt-5">
+            <button className="btn btn-secondary mt-3" onClick={() => navigate(-1)}>Артқа</button>
+
             <h1 className="fw-bold">{quiz.title}</h1>
             <hr />
+
 
             {/* Last Attempt Info with Chart */}
             {lastAttempt && (
@@ -109,13 +119,23 @@ const QuizProfile = () => {
                 </div>
             ) : lastAttempt && (
                 <div className="text-center mt-3">
-                    <button
-                        className="btn btn-secondary"
-                        onClick={handleGenerateFeedback}
-                        disabled={generatingFeedback}
-                    >
-                        {generatingFeedback ? "Generating..." : "Generate AI Feedback"}
-                    </button>
+                    {generatingFeedback ? (
+                        <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                            style={{ display: "inline-block" }}
+                        >
+                            <Spinner animation="border" variant="primary" />
+                        </motion.div>
+                    ) : (
+                        <button
+                            className="btn btn-secondary"
+                            onClick={handleGenerateFeedback}
+                            disabled={generatingFeedback}
+                        >
+                            Generate AI Feedback
+                        </button>
+                    )}
                 </div>
             )}
 

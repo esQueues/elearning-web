@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Lecture = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [lecture, setLecture] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -51,6 +52,7 @@ const Lecture = () => {
                     ) : (
                         <p className="text-danger">Invalid video link</p>
                     )}
+                    <button className="btn btn-secondary mt-3" onClick={() => navigate(-1)}>Артқа</button>
                 </div>
             </div>
         </div>
