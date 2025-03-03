@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Dashboard = () => {
-    const [ setStudent] = useState(null);
+    const [setStudent] = useState(null);
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -26,12 +26,6 @@ const Dashboard = () => {
 
     return (
         <div className="container mt-4">
-            {/*{student && (*/}
-            {/*    <div className="text-center mb-4">*/}
-            {/*        <h3>Welcome, {student.firstname} {student.lastname}!</h3>*/}
-            {/*    </div>*/}
-            {/*)}*/}
-
             <h1 className="text-center mb-4 fw-bold">My Courses</h1>
 
             {courses.length === 0 ? (
@@ -53,17 +47,26 @@ const Dashboard = () => {
                                             className="card-img-top"
                                             style={{ height: "150px", objectFit: "cover" }}
                                         />
-
-
                                     </div>
                                     <div className="card-body">
                                         <h5 className="card-title text-dark fw-bold">{course.title}</h5>
                                         <p className="card-text text-muted mb-2">
                                             <i className="fas fa-user"></i> Teacher: {course.teacher?.firstname ?? "Unknown"} {course.teacher?.lastname ?? ""}
                                         </p>
-                                        {/*<p className="text-secondary small">*/}
-                                        {/*    <i className="fas fa-clock"></i> Duration: {course.duration || "N/A"} hours*/}
-                                        {/*</p>*/}
+
+                                        {/* Прогресс */}
+                                        <div className="progress mt-3" style={{ height: "10px" }}>
+                                            <div
+                                                className="progress-bar"
+                                                role="progressbar"
+                                                style={{ width: `${course.progress}%` }}
+                                                aria-valuenow={course.progress}
+                                                aria-valuemin="0"
+                                                aria-valuemax="100"
+                                            >
+                                            </div>
+                                        </div>
+                                        <p className="text-center mt-1 small text-muted">{course.progress.toFixed(2)}% completed</p>
                                     </div>
                                 </div>
                             </Link>

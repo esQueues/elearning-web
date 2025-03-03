@@ -4,7 +4,7 @@ import axios from "axios";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { motion } from "framer-motion";
-import { Spinner } from "react-bootstrap"; // Bootstrap spinner (optional)
+import { Spinner } from "react-bootstrap";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -76,14 +76,6 @@ const QuizProfile = () => {
             .replace(/\n/g, "<br />");
     };
 
-
-
-
-
-
-
-
-
     return (
         <div className="container mt-5">
             <button className="btn btn-secondary mt-3" onClick={() => navigate(-1)}>Артқа</button>
@@ -91,19 +83,19 @@ const QuizProfile = () => {
             <h1 className="fw-bold">{quiz.title}</h1>
             <hr />
 
-
-            {/* Last Attempt Info with Chart */}
             {lastAttempt && (
-                <div className="alert alert-info text-center">
+                <div className="alert text-center ${lastAttempt.passed ? 'alert-success' : 'alert-danger'}">
                     <h5>Last Attempt Score</h5>
                     <div style={{ width: "200px", margin: "auto" }}>
                         <Doughnut data={scoreData} />
                     </div>
                     <p className="mt-2"><strong>Score:</strong> {lastAttempt.score.toFixed(2)} / 100</p>
+                    <p className={`fw-bold mt-2 ${lastAttempt.passed ? 'text-success' : 'text-danger'}`}>
+                        {lastAttempt.passed ? "Passed ✅" : "Not Passed ❌ Try Again"}
+                    </p>
                 </div>
             )}
 
-            {/* Feedback Section */}
             {feedback ? (
                 <div className="card mt-3">
                     <div className="card-header">
@@ -139,7 +131,6 @@ const QuizProfile = () => {
                 </div>
             )}
 
-            {/* Start Quiz Button (Redirect to QuizTaker) */}
             <div className="text-center mt-4">
                 <button className="btn btn-primary btn-lg" onClick={() => navigate(`/quiz/${quizId}`)}>
                     Start Quiz
