@@ -10,7 +10,7 @@ const TeachersManagement = () => {
     useEffect(() => {
         const fetchTeachers = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/teachers", { withCredentials: true });
+                const response = await axios.get("/api/teachers", { withCredentials: true });
                 setTeachers(response.data);
             } catch (error) {
                 console.error("Error fetching teachers:", error);
@@ -24,7 +24,7 @@ const TeachersManagement = () => {
     // Handle delete teacher
     const handleDelete = async (teacherId) => {
         try {
-            await axios.delete(`http://localhost:8080/api/teachers/${teacherId}`, { withCredentials: true });
+            await axios.delete(`/api/teachers/${teacherId}`, { withCredentials: true });
             setTeachers(teachers.filter(teacher => teacher.id !== teacherId));
         } catch (error) {
             console.error("Error deleting teacher:", error);

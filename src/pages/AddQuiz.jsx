@@ -82,7 +82,7 @@ const AddQuiz = () => {
         const quiz = { title, questions };
 
         axios
-            .post(`http://localhost:8080/api/modules/${id}/quizzes`, quiz, { withCredentials: true })
+            .post(`/api/modules/${id}/quizzes`, quiz, { withCredentials: true })
             .then((response) => {
                 const courseId = response.data.courseId; // Extract courseId from response
                 navigate(`/courses/${courseId}/manage`); // Redirect to course manage page

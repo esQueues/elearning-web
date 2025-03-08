@@ -17,7 +17,7 @@ const AdminDashboard = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-6">
+                <   div className="col-md-6">
                     <div className="card text-center">
                         <div className="card-body">
                             <FaGraduationCap size={40} className="mb-3" />

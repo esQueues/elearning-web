@@ -15,7 +15,7 @@ const TeacherProfile = () => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/api/teachers/${teacherId}`, { withCredentials: true })
+            .get(`/api/teachers/${teacherId}`, { withCredentials: true })
             .then((response) => {
                 setTeacher(response.data);
                 setFormData(response.data);
@@ -31,7 +31,7 @@ const TeacherProfile = () => {
     };
 
     const handleSave = () => {
-        axios.put(`http://localhost:8080/api/teachers/${teacherId}/update`, formData, { withCredentials: true })
+        axios.put(`/api/teachers/${teacherId}/update`, formData, { withCredentials: true })
             .then(response => {
                 setTeacher(response.data);
                 setEditing(false);
@@ -42,7 +42,7 @@ const TeacherProfile = () => {
     };
 
     const handleChangePassword = () => {
-        axios.put(`http://localhost:8080/api/teachers/profile/change-password`,
+        axios.put(`/api/teachers/profile/change-password`,
             { oldPassword, newPassword },
             { withCredentials: true })
             .then(() => {

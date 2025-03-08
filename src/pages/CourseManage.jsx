@@ -15,21 +15,21 @@ const CourseManage = () => {
     const [editedDescription, setEditedDescription] = useState("");
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/courses/${id}`, { withCredentials: true })
+        axios.get(`/api/courses/${id}`, { withCredentials: true })
             .then((response) => setCourse(response.data))
             .catch((error) => console.error("Error fetching course:", error))
             .finally(() => setLoading(false));
     }, [id]);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/courses/${id}/students`, { withCredentials: true })
+        axios.get(`/api/courses/${id}/students`, { withCredentials: true })
             .then((response) => setStudents(response.data))
             .catch((error) => console.error("Error fetching students:", error));
     }, [id]);
 
     const handleDeleteCourse = () => {
         if (window.confirm("Are you sure you want to delete this course? This action cannot be undone.")) {
-            axios.delete(`http://localhost:8080/api/courses/${id}`, { withCredentials: true })
+            axios.delete(`/api/courses/${id}`, { withCredentials: true })
                 .then(() => navigate("/teacher-dashboard"))
                 .catch((error) => console.error("Error deleting course:", error));
         }
@@ -37,7 +37,7 @@ const CourseManage = () => {
 
     const handleDeleteModule = (moduleId) => {
         axios
-            .delete(`http://localhost:8080/api/courses/modules/${moduleId}`, { withCredentials: true })
+            .delete(`/api/courses/modules/${moduleId}`, { withCredentials: true })
             .then(() => setCourse(prev => ({
                 ...prev,
                 modules: prev.modules.filter(m => m.id !== moduleId)
@@ -47,7 +47,7 @@ const CourseManage = () => {
 
     const handleDeleteLecture = (lectureId, moduleId) => {
         axios
-            .delete(`http://localhost:8080/api/courses/modules/lecture/${lectureId}`, { withCredentials: true })
+            .delete(`/api/courses/modules/lecture/${lectureId}`, { withCredentials: true })
             .then(() => setCourse(prev => ({
                 ...prev,
                 modules: prev.modules.map(module =>
@@ -61,7 +61,7 @@ const CourseManage = () => {
 
     const handleDeleteQuiz = (quizId, moduleId) => {
         axios
-            .delete(`http://localhost:8080/api/modules/quizzes/${quizId}`, { withCredentials: true })
+            .delete(`/api/modules/quizzes/${quizId}`, { withCredentials: true })
             .then(() => setCourse(prev => ({
                 ...prev,
                 modules: prev.modules.map(module =>
@@ -80,7 +80,7 @@ const CourseManage = () => {
     };
 
     const handleSaveCourse = () => {
-        axios.put(`http://localhost:8080/api/courses/${id}`,
+        axios.put(`/api/courses/${id}`,
             { title: editedTitle, description: editedDescription },
             { withCredentials: true }
         )

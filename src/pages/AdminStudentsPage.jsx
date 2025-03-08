@@ -10,7 +10,7 @@ const AdminStudentsPage = () => {
     useEffect(() => {
         const fetchStudents = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/student/all", { withCredentials: true });
+                const response = await axios.get("/api/student/all", { withCredentials: true });
                 setStudents(response.data);
             } catch (error) {
                 console.error("Error fetching students:", error);
@@ -24,7 +24,7 @@ const AdminStudentsPage = () => {
     // Handle delete student
     const handleDelete = async (studentId) => {
         try {
-            await axios.delete(`http://localhost:8080/api/student/${studentId}`, { withCredentials: true });
+            await axios.delete(`/api/student/${studentId}`, { withCredentials: true });
             // Update the students list after deletion
             setStudents(students.filter(student => student.id !== studentId));
         } catch (error) {

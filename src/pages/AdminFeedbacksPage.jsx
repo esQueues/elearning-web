@@ -5,7 +5,7 @@ const AdminFeedbacks = () => {
     const [feedbacks, setFeedbacks] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/api/quiz/feedback/all", { withCredentials: true })
+        axios.get("/api/quiz/feedback/all", { withCredentials: true })
             .then(response => {
                 const sortedFeedbacks = response.data.sort((a, b) => new Date(b.attemptTime) - new Date(a.attemptTime));
                 setFeedbacks(sortedFeedbacks);
@@ -27,7 +27,7 @@ const AdminFeedbacks = () => {
 
     const deleteFeedback = (id) => {
         if (window.confirm("Are you sure you want to delete this feedback?")) {
-            axios.delete(`http://localhost:8080/api/quiz/feedback/${id}`, { withCredentials: true })
+            axios.delete(`/api/quiz/feedback/${id}`, { withCredentials: true })
                 .then(() => {
                     setFeedbacks(feedbacks.filter(feedback => feedback.id !== id));
                 })

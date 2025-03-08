@@ -8,7 +8,7 @@ const EditModule = () => {
     const [module, setModule] = useState({ title: "" });
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/courses/modules/${moduleId}`, { withCredentials: true })
+        axios.get(`/api/courses/modules/${moduleId}`, { withCredentials: true })
             .then(response => setModule(response.data))
             .catch(error => console.error("Error fetching module:", error));
     }, [moduleId]);
@@ -19,7 +19,7 @@ const EditModule = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.put(`http://localhost:8080/api/courses/modules/${moduleId}`, module, { withCredentials: true })
+        axios.put(`/api/courses/modules/${moduleId}`, module, { withCredentials: true })
             .then(() => navigate(-1)) // Navigate back after updating
             .catch(error => console.error("Error updating module:", error));
     };

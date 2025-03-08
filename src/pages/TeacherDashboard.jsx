@@ -11,7 +11,7 @@ const TeacherDashboard = () => {
     // Fetch courses from the backend
     const fetchCourses = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/teachers/courses', { withCredentials: true });
+            const response = await axios.get('/api/teachers/courses', { withCredentials: true });
             setCourses(response.data);
             setLoading(false);
         } catch (error) {

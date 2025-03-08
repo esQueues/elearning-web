@@ -20,7 +20,7 @@ const AddCourse = () => {
 
         setLoading(true);
         try {
-            await axios.post("http://localhost:8080/api/courses", { title, description }, { withCredentials: true });
+            await axios.post("/api/courses", { title, description }, { withCredentials: true });
 
             // Передаем флаг courseAdded в state
             navigate("/teacher-dashboard",

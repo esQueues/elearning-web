@@ -28,7 +28,7 @@ const AddModule = () => {
 
         try {
             await axios.post(
-                `http://localhost:8080/api/courses/${id}/modules`,
+                `/api/courses/${id}/modules`,
                 { title },
                 { withCredentials: true }
             );

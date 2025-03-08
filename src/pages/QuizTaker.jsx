@@ -12,7 +12,7 @@ const QuizTaker = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/modules/quizzes/${quizId}`, { withCredentials: true })
+        axios.get(`/api/modules/quizzes/${quizId}`, { withCredentials: true })
             .then((response) => {
                 setQuiz(response.data);
                 setLoading(false);
@@ -34,7 +34,7 @@ const QuizTaker = () => {
             answerId: answerId,
         }));
 
-        axios.post(`http://localhost:8080/api/modules/quizzes/${quizId}/submit`, submissionData, { withCredentials: true })
+        axios.post(`/api/modules/quizzes/${quizId}/submit`, submissionData, { withCredentials: true })
             .then((response) => setResult(response.data))
             .catch((error) => console.error("Error submitting quiz:", error));
     };

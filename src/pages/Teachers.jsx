@@ -9,7 +9,7 @@ const Teachers = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/api/teachers")
+        axios.get("/api/teachers")
             .then((response) => {
                 if (Array.isArray(response.data)) {
                     setTeachers(response.data);

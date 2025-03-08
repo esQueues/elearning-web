@@ -10,7 +10,7 @@ const AdminCoursePage = () => {
     // Fetch all courses (public and private) from the backend
     const fetchCourses = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/courses/all', { withCredentials: true });
+            const response = await axios.get('/api/courses/all', { withCredentials: true });
             setCourses(response.data);
             setLoading(false);
         } catch (error) {
@@ -21,7 +21,7 @@ const AdminCoursePage = () => {
 
     const approveCourse = async (id) => {
         try {
-            await axios.patch(`http://localhost:8080/api/courses/${id}/approve`, {}, { withCredentials: true });
+            await axios.patch(`/api/courses/${id}/approve`, {}, { withCredentials: true });
             fetchCourses(); // Refresh course list
         } catch (error) {
             console.error("Error approving course:", error);
@@ -30,7 +30,7 @@ const AdminCoursePage = () => {
 
     const disallowCourse = async (id) => {
         try {
-            await axios.patch(`http://localhost:8080/api/courses/${id}/disallow`, {}, { withCredentials: true });
+            await axios.patch(`/api/courses/${id}/disallow`, {}, { withCredentials: true });
             fetchCourses(); // Refresh course list
         } catch (error) {
             console.error("Error making course private:", error);

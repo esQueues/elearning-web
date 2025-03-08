@@ -10,7 +10,7 @@ const Profile = () => {
     const [oldPassword, setOldPassword] = useState("");
 
     useEffect(() => {
-        axios.get("http://localhost:8080/api/student/profile", { withCredentials: true })
+        axios.get("/api/student/profile", { withCredentials: true })
             .then(response => {
                 setStudent(response.data);
                 setFormData(response.data);
@@ -27,7 +27,7 @@ const Profile = () => {
     };
 
     const handleSave = () => {
-        axios.put("http://localhost:8080/api/student/profile/update", formData, { withCredentials: true })
+        axios.put("/api/student/profile/update", formData, { withCredentials: true })
             .then(response => {
                 setStudent(response.data);
                 setEditing(false);
@@ -38,7 +38,7 @@ const Profile = () => {
     };
 
     const handleChangePassword = () => {
-        axios.put("http://localhost:8080/api/student/profile/change-password",
+        axios.put("/api/student/profile/change-password",
             { oldPassword, newPassword },
             { withCredentials: true })
             .then(() => {

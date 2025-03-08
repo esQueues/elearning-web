@@ -11,7 +11,7 @@ const RegisterTeacher = () => {
 
     const handleRegister = async (e) => {
         e.preventDefault();
-        const response = await fetch("http://localhost:8080/api/auth/register/teacher", {
+        const response = await fetch("/api/auth/register/teacher", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password, firstname, lastname, bio }),

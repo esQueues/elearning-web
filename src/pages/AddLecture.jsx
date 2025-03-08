@@ -48,7 +48,7 @@ const AddLecture = () => {
 
         try {
             const response = await axios.post(
-                `http://localhost:8080/api/courses/modules/${id}/lectures`,
+                `/api/courses/modules/${id}/lectures`,
                 { title, url },
                 { withCredentials: true }
             );

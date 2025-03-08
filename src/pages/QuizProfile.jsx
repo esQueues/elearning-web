@@ -19,18 +19,18 @@ const QuizProfile = () => {
     const [generatingFeedback, setGeneratingFeedback] = useState(false);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/modules/quizzes/${quizId}`, { withCredentials: true })
+        axios.get(`/api/modules/quizzes/${quizId}`, { withCredentials: true })
             .then((response) => setQuiz(response.data))
             .catch((error) => console.error("Error fetching quiz:", error))
             .finally(() => setLoading(false));
     }, [quizId]);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/modules/quizzes/${quizId}/attempt`, { withCredentials: true })
+        axios.get(`/api/modules/quizzes/${quizId}/attempt`, { withCredentials: true })
             .then((response) => {
                 setLastAttempt(response.data);
                 if (response.data?.attemptId) {
-                    return axios.get(`http://localhost:8080/api/quiz/feedback/${response.data.attemptId}`, { withCredentials: true });
+                    return axios.get(`/api/quiz/feedback/${response.data.attemptId}`, { withCredentials: true });
                 }
                 return null;
             })
@@ -46,7 +46,7 @@ const QuizProfile = () => {
         if (!lastAttempt) return;
         setGeneratingFeedback(true);
 
-        axios.post(`http://localhost:8080/api/quiz/feedback/${lastAttempt.attemptId}`, {}, { withCredentials: true })
+        axios.post(`/api/quiz/feedback/${lastAttempt.attemptId}`, {}, { withCredentials: true })
             .then((response) => setFeedback(response.data))
             .catch((error) => console.error("Error generating feedback:", error))
             .finally(() => setGeneratingFeedback(false));

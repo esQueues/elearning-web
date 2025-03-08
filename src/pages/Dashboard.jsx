@@ -9,11 +9,11 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/api/student/profile", { withCredentials: true })
+        axios.get("/api/student/profile", { withCredentials: true })
             .then((response) => setStudent(response.data))
             .catch((error) => console.error("Error fetching student profile:", error));
 
-        axios.get("http://localhost:8080/api/courses/my-courses", { withCredentials: true })
+        axios.get("/api/courses/my-courses", { withCredentials: true })
             .then((response) => {
                 console.log("Courses response:", response.data);
                 setCourses(response.data);

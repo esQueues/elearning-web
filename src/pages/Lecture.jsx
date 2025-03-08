@@ -11,7 +11,7 @@ const Lecture = () => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/api/courses/modules/lectures/${id}`, { withCredentials: true })
+            .get(`/api/courses/modules/lectures/${id}`, { withCredentials: true })
             .then((response) => {
                 setLecture(response.data);
             })

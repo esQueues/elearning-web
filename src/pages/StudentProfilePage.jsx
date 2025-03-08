@@ -11,7 +11,7 @@ const StudentProfilePage = () => {
     useEffect(() => {
         const fetchStudent = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/student/${id}`, { withCredentials: true });
+                const response = await axios.get(`/api/student/${id}`, { withCredentials: true });
                 setStudent(response.data);
             } catch (error) {
                 console.error("Error fetching student profile:", error);
@@ -24,7 +24,7 @@ const StudentProfilePage = () => {
 
     const handleDeleteStudent = async () => {
         try {
-            await axios.delete(`http://localhost:8080/api/student/${id}`, { withCredentials: true });
+            await axios.delete(`/api/student/${id}`, { withCredentials: true });
             navigate('/admin/students'); // Redirect to the admin students list after deletion
         } catch (error) {
             console.error("Error deleting student:", error);

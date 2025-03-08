@@ -11,7 +11,7 @@ const EditQuiz = () => {
     });
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/modules/quizzes/${quizId}`, { withCredentials: true })
+        axios.get(`/api/modules/quizzes/${quizId}`, { withCredentials: true })
             .then(response => setQuiz(response.data))
             .catch(error => console.error("Error fetching quiz:", error));
     }, [quizId]);
@@ -36,7 +36,7 @@ const EditQuiz = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.put(`http://localhost:8080/api/modules/quizzes/${quizId}`, quiz, { withCredentials: true })
+        axios.put(`/api/modules/quizzes/${quizId}`, quiz, { withCredentials: true })
             .then(() => navigate(-1))
             .catch(error => console.error("Error updating quiz:", error));
     };

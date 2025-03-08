@@ -10,7 +10,7 @@ const PublicTeacherProfile = () => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/api/teachers/${teacherId}`, { withCredentials: true })
+            .get(`/api/teachers/${teacherId}`, { withCredentials: true })
             .then((response) => {
                 setTeacher(response.data);
             })

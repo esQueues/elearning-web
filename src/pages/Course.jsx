@@ -11,7 +11,7 @@ const Course = () => {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/api/courses/${id}`, { withCredentials: true })
+            .get(`/api/courses/${id}`, { withCredentials: true })
             .then((response) => {
                 setCourse(response.data);
                 setEnrolled(response.data.enrolled);
@@ -26,7 +26,7 @@ const Course = () => {
 
     const handleEnroll = () => {
         axios
-            .post(`http://localhost:8080/api/courses/${id}/enroll`, {}, { withCredentials: true })
+            .post(`/api/courses/${id}/enroll`, {}, { withCredentials: true })
             .then(() => {
                 setEnrolled(true);
             })

@@ -9,7 +9,7 @@ const EditLecture = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/courses/modules/lectures/${lectureId}`, { withCredentials: true })
+        axios.get(`/api/courses/modules/lectures/${lectureId}`, { withCredentials: true })
             .then(response => {
                 setLecture(response.data);
                 setLoading(false);
@@ -26,7 +26,7 @@ const EditLecture = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.put(`http://localhost:8080/api/courses/modules/lectures/${lectureId}`, lecture, { withCredentials: true })
+        axios.put(`/api/courses/modules/lectures/${lectureId}`, lecture, { withCredentials: true })
             .then(() => navigate(-1)) // Navigate back after updating
             .catch(error => console.error("Error updating lecture:", error));
     };

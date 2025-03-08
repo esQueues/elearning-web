@@ -24,7 +24,7 @@ const CourseList = () => {
     const fetchCourses = (query) => {
         setLoading(true);
         axios
-            .get(`http://localhost:8080/api/courses/get?query=${query}`, { withCredentials: true })
+            .get(`/api/courses/get?query=${query}`, { withCredentials: true })
             .then((response) => {
                 setCourses(Array.isArray(response.data) ? response.data : []);
             })
